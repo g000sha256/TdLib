@@ -157,7 +157,7 @@ public final class Client {
      * @param maxVerbosityLevel The maximum verbosity level of messages for which the callback will be called.
      * @param logMessageHandler Handler for messages that are added to the internal TDLib log. Pass null to remove the handler.
      */
-    public static void setLogMessageHandler(int maxVerbosityLevel, Client.LogMessageHandler logMessageHandler) {
+    public static void setLogMessageHandler1(int maxVerbosityLevel, Client.LogMessageHandler logMessageHandler) {
         setLogMessageHandler(maxVerbosityLevel, logMessageHandler);
     }
 

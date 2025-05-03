@@ -298,7 +298,7 @@ public final class Example {
 
     public static void main(String[] args) throws InterruptedException {
         // set log message handler to handle only fatal errors (0) and plain log messages (-1)
-        Client.setLogMessageHandler(0, new LogMessageHandler());
+        Client.setLogMessageHandler1(0, new LogMessageHandler());
 
         // disable TDLib log and redirect fatal errors and plain log messages to a file
         try {
