@@ -213,11 +213,11 @@ static jint register_native(JavaVM *vm) {
 
 #define TD_OBJECT "L" PACKAGE_NAME "/TdApi$Object;"
 #define TD_FUNCTION "L" PACKAGE_NAME "/TdApi$Function;"
-  register_method(client_class, "createNativeClient", "()I", Client_createNativeClient);
-  register_method(client_class, "nativeClientSend", "(IJ" TD_FUNCTION ")V", Client_nativeClientSend);
-  register_method(client_class, "nativeClientReceive", "([I[J[" TD_OBJECT "D)I", Client_nativeClientReceive);
-  register_method(client_class, "nativeClientExecute", "(" TD_FUNCTION ")" TD_OBJECT, Client_nativeClientExecute);
-  register_method(client_class, "nativeClientSetLogMessageHandler", "(IL" PACKAGE_NAME "/Client$LogMessageHandler;)V",
+  register_method(client_class, "create", "()I", Client_createNativeClient);
+  register_method(client_class, "send", "(IJ" TD_FUNCTION ")V", Client_nativeClientSend);
+  register_method(client_class, "receive", "([I[J[" TD_OBJECT "D)I", Client_nativeClientReceive);
+  register_method(client_class, "execute", "(" TD_FUNCTION ")" TD_OBJECT, Client_nativeClientExecute);
+  register_method(client_class, "setLogMessageHandler", "(IL" PACKAGE_NAME "/Client$LogMessageHandler;)V",
                   Client_nativeClientSetLogMessageHandler);
 
   register_method(object_class, "toString", "()Ljava/lang/String;", Object_toString);

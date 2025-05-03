@@ -22,7 +22,7 @@ endif()
 message(STATUS "Found Java: ${Java_JAVAC_EXECUTABLE} ${Java_JAVADOC_EXECUTABLE}")
 
 # Generating TdApi.java
-set(TD_API_JAVA_PACKAGE "org/drinkless/tdlib")
+set(TD_API_JAVA_PACKAGE "dev/g000sha256/tdl")
 set(TD_API_JAVA_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 set(JAVA_SOURCE_PATH "${TD_API_JAVA_PATH}/${TD_API_JAVA_PACKAGE}")
 if (TD_JSON_JAVA)
