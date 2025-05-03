@@ -61,7 +61,7 @@ if [ "$TDLIB_INTERFACE" == "Java" ] ; then
   echo "Generating Javadoc documentation..."
   cp "$ANDROID_SDK_ROOT/platforms/android-34/android.jar" . || exit 1
   JAVADOC_SEPARATOR=$([ "$OS_NAME" == "win" ] && echo ";" || echo ":")
-  javadoc -d tdlib/javadoc -encoding UTF-8 -charset UTF-8 -classpath "android.jar${JAVADOC_SEPARATOR}annotation-1.4.0.jar" -quiet -sourcepath tdlib/java dev/g000sha256/tdl || exit 1
+  javadoc -d tdlib/javadoc -encoding UTF-8 -charset UTF-8 -classpath "android.jar${JAVADOC_SEPARATOR}annotation-1.4.0.jar" -quiet -sourcepath tdlib/java dev.g000sha256.tdl || exit 1
   rm android.jar annotation-1.4.0.jar || exit 1
 fi
 if [ "$TDLIB_INTERFACE" == "JSONJava" ] ; then
