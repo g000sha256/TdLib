@@ -4,7 +4,7 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-package org.drinkless.tdlib;
+package dev.g000sha256.tdl;
 
 /**
  * Main class for interaction with the TDLib using JSON interface.
@@ -23,7 +23,7 @@ public final class JsonClient {
      * The TDLib instance will not send updates until the first request is sent to it.
      * @return Opaque identifier of a new TDLib instance.
      */
-    public static native int createClientId();
+    public static native int create();
 
     /**
      * Sends request to the TDLib client. May be called from any thread.

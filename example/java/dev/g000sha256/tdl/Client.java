@@ -4,7 +4,7 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-package org.drinkless.tdlib;
+package dev.g000sha256.tdl;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -96,7 +96,7 @@ public final class Client {
         if (resultHandler != null) {
             handlers.put(queryId, new Handler(resultHandler, exceptionHandler));
         }
-        nativeClientSend(nativeClientId, queryId, query);
+        send(nativeClientId, queryId, query);
     }
 
     /**
@@ -121,7 +121,7 @@ public final class Client {
      */
     @SuppressWarnings("unchecked")
     public static <T extends TdApi.Object> T execute(TdApi.Function<T> query) throws ExecutionException {
-        TdApi.Object object = nativeClientExecute(query);
+        TdApi.Object object = execute(query);
         if (object instanceof TdApi.Error) {
             throw new ExecutionException((TdApi.Error) object);
         }
@@ -158,7 +158,7 @@ public final class Client {
      * @param logMessageHandler Handler for messages that are added to the internal TDLib log. Pass null to remove the handler.
      */
     public static void setLogMessageHandler(int maxVerbosityLevel, Client.LogMessageHandler logMessageHandler) {
-        nativeClientSetLogMessageHandler(maxVerbosityLevel, logMessageHandler);
+        setLogMessageHandler(maxVerbosityLevel, logMessageHandler);
     }
 
     private static class ResponseReceiver implements Runnable {
@@ -167,7 +167,7 @@ public final class Client {
         @Override
         public void run() {
             while (true) {
-                int resultN = nativeClientReceive(clientIds, eventIds, events, 100000.0 /*seconds*/);
+                int resultN = receive(clientIds, eventIds, events, 100000.0 /*seconds*/);
                 for (int i = 0; i < resultN; i++) {
                     processResult(clientIds[i], eventIds[i], events[i]);
                     events[i] = null;
@@ -237,7 +237,7 @@ public final class Client {
 
     private Client(ResultHandler updateHandler, ExceptionHandler updateExceptionHandler, ExceptionHandler defaultExceptionHandler) {
         clientCount.incrementAndGet();
-        nativeClientId = createNativeClient();
+        nativeClientId = create();
         if (updateHandler != null) {
             updateHandlers.put(nativeClientId, new Handler(updateHandler, updateExceptionHandler));
         }
@@ -247,13 +247,13 @@ public final class Client {
         send(new TdApi.GetOption("version"), null, null);
     }
 
-    private static native int createNativeClient();
+    private static native int create();
 
-    private static native void nativeClientSend(int nativeClientId, long eventId, TdApi.Function function);
+    private static native void send(int nativeClientId, long eventId, TdApi.Function function);
 
-    private static native int nativeClientReceive(int[] clientIds, long[] eventIds, TdApi.Object[] events, double timeout);
+    private static native int receive(int[] clientIds, long[] eventIds, TdApi.Object[] events, double timeout);
 
-    private static native TdApi.Object nativeClientExecute(TdApi.Function function);
+    private static native TdApi.Object execute(TdApi.Function function);
 
-    private static native void nativeClientSetLogMessageHandler(int maxVerbosityLevel, LogMessageHandler logMessageHandler);
+    private static native void setLogMessageHandler(int maxVerbosityLevel, LogMessageHandler logMessageHandler);
 }

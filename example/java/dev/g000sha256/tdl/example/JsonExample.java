@@ -4,9 +4,9 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-package org.drinkless.tdlib.example;
+package dev.g000sha256.tdl.example;
 
-import org.drinkless.tdlib.JsonClient;
+import dev.g000sha256.tdl.JsonClient;
 
 /**
  * Example class for TDLib usage from Java using JSON interface.
@@ -21,7 +21,7 @@ public final class JsonExample {
         JsonClient.execute("{\"@type\":\"setLogStream\",\"log_stream\":{\"@type\":\"logStreamFile\",\"path\":\"tdlib.log\",\"max_file_size\":128000000}}");
 
         // create client identifier
-        int clientId = JsonClient.createClientId();
+        int clientId = JsonClient.create();
 
         // send first request to activate the client
         JsonClient.send(clientId, "{\"@type\":\"getOption\",\"name\":\"version\"}");

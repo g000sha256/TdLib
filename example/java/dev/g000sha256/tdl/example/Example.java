@@ -4,10 +4,10 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-package org.drinkless.tdlib.example;
+package dev.g000sha256.tdl.example;
 
-import org.drinkless.tdlib.Client;
-import org.drinkless.tdlib.TdApi;
+import dev.g000sha256.tdl.Client;
+import dev.g000sha256.tdl.TdApi;
 
 import java.io.BufferedReader;
 import java.io.IOError;
