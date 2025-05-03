@@ -120,7 +120,7 @@ public final class Client {
      * @throws ExecutionException if query execution fails.
      */
     @SuppressWarnings("unchecked")
-    public static <T extends TdApi.Object> T execute(TdApi.Function<T> query) throws ExecutionException {
+    public static <T extends TdApi.Object> T execute1(TdApi.Function<T> query) throws ExecutionException {
         TdApi.Object object = execute(query);
         if (object instanceof TdApi.Error) {
             throw new ExecutionException((TdApi.Error) object);
