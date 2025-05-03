@@ -189,7 +189,7 @@ static jint register_native(JavaVM *vm) {
 #ifdef TD_JSON_JAVA
   auto client_class = td::jni::get_jclass(env, PACKAGE_NAME "/JsonClient");
 
-  register_method(client_class, "createClientId", "()I", JsonClient_createClientId);
+  register_method(client_class, "create", "()I", JsonClient_createClientId);
   register_method(client_class, "send", "(ILjava/lang/String;)V", JsonClient_send);
   register_method(client_class, "receive", "(D)Ljava/lang/String;", JsonClient_receive);
   register_method(client_class, "execute", "(Ljava/lang/String;)Ljava/lang/String;", JsonClient_execute);

@@ -39,7 +39,7 @@ if (CMAKE_CROSSCOMPILING)
   else()
     target_link_libraries(tdjni PRIVATE Td::TdStatic)
   endif()
-  target_compile_definitions(tdjni PRIVATE PACKAGE_NAME="org/drinkless/tdlib")
+  target_compile_definitions(tdjni PRIVATE PACKAGE_NAME="dev/g000sha256/tdl")
 
   add_custom_command(TARGET tdjni POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E rename $<TARGET_FILE:tdjni> $<TARGET_FILE:tdjni>.debug
@@ -51,7 +51,7 @@ else()
     return()
   endif()
 
-  set(TD_API_JAVA_PACKAGE "org/drinkless/tdlib")
+  set(TD_API_JAVA_PACKAGE "dev/g000sha256/tdl")
   set(TD_API_JAVA_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${TD_API_JAVA_PACKAGE}/TdApi.java")
   set(TD_API_TLO_PATH "${TD_DIR}/td/generate/auto/tlo/td_api.tlo")
   set(TD_API_TL_PATH "${TD_DIR}/td/generate/scheme/td_api.tl")

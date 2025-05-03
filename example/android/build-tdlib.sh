@@ -52,21 +52,21 @@ if [ "$TDLIB_INTERFACE" == "Java" ] ; then
 
   echo "Generating Java source files..."
   cmake --build build-native-$TDLIB_INTERFACE --target tl_generate_java || exit 1
-  php AddIntDef.php org/drinkless/tdlib/TdApi.java || exit 1
-  mkdir -p tdlib/java/org/drinkless/tdlib || exit 1
-  cp -p {..,tdlib}/java/org/drinkless/tdlib/Client.java || exit 1
-  mv {,tdlib/java/}org/drinkless/tdlib/TdApi.java || exit 1
+  php AddIntDef.php dev/g000sha256/tdl/TdApi.java || exit 1
+  mkdir -p tdlib/java/dev/g000sha256/tdl || exit 1
+  cp -p {..,tdlib}/java/dev/g000sha256/tdl/Client.java || exit 1
+  mv {,tdlib/java/}dev/g000sha256/tdl/TdApi.java || exit 1
   rm -rf org || exit 1
 
   echo "Generating Javadoc documentation..."
   cp "$ANDROID_SDK_ROOT/platforms/android-34/android.jar" . || exit 1
   JAVADOC_SEPARATOR=$([ "$OS_NAME" == "win" ] && echo ";" || echo ":")
-  javadoc -d tdlib/javadoc -encoding UTF-8 -charset UTF-8 -classpath "android.jar${JAVADOC_SEPARATOR}annotation-1.4.0.jar" -quiet -sourcepath tdlib/java org.drinkless.tdlib || exit 1
+  javadoc -d tdlib/javadoc -encoding UTF-8 -charset UTF-8 -classpath "android.jar${JAVADOC_SEPARATOR}annotation-1.4.0.jar" -quiet -sourcepath tdlib/java dev/g000sha256/tdl || exit 1
   rm android.jar annotation-1.4.0.jar || exit 1
 fi
 if [ "$TDLIB_INTERFACE" == "JSONJava" ] ; then
-  mkdir -p tdlib/java/org/drinkless/tdlib || exit 1
-  cp -p {..,tdlib}/java/org/drinkless/tdlib/JsonClient.java || exit 1
+  mkdir -p tdlib/java/dev/g000sha256/tdl || exit 1
+  cp -p {..,tdlib}/java/dev/g000sha256/tdl/JsonClient.java || exit 1
 fi
 
 echo "Building TDLib..."
