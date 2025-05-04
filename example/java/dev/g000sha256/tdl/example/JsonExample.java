@@ -21,7 +21,7 @@ public final class JsonExample {
         JsonClient.execute("{\"@type\":\"setLogStream\",\"log_stream\":{\"@type\":\"logStreamFile\",\"path\":\"tdlib.log\",\"max_file_size\":128000000}}");
 
         // create client identifier
-        int clientId = JsonClient.create();
+        int clientId = JsonClient.createClientId();
 
         // send first request to activate the client
         JsonClient.send(clientId, "{\"@type\":\"getOption\",\"name\":\"version\"}");

@@ -298,12 +298,12 @@ public final class Example {
 
     public static void main(String[] args) throws InterruptedException {
         // set log message handler to handle only fatal errors (0) and plain log messages (-1)
-        Client.setLogMessageHandler1(0, new LogMessageHandler());
+        Client.setLogMessageHandler(0, new LogMessageHandler());
 
         // disable TDLib log and redirect fatal errors and plain log messages to a file
         try {
-            Client.execute1(new TdApi.SetLogVerbosityLevel(0));
-            Client.execute1(new TdApi.SetLogStream(new TdApi.LogStreamFile("tdlib.log", 1 << 27, false)));
+            Client.execute(new TdApi.SetLogVerbosityLevel(0));
+            Client.execute(new TdApi.SetLogStream(new TdApi.LogStreamFile("tdlib.log", 1 << 27, false)));
         } catch (Client.ExecutionException error) {
             throw new IOError(new IOException("Write access to the current directory is required"));
         }

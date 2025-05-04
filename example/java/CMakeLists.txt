@@ -53,8 +53,8 @@ else()
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/td/bin/td_generate_java_api ${TD_API_TLO_PATH} ${TD_API_TL_PATH} ${JAVADOC_TL_DOCUMENTATION_GENERATOR_PATH}
   )
 
-  set(JAVA_EXAMPLE_FILES "${JAVA_SOURCE_PATH}/example/Example.java")
-  set(JAVA_SOURCE_FILES "${JAVA_SOURCE_PATH}/Client.java" "${JAVA_SOURCE_PATH}/TdApi.java")
+  set(JAVA_EXAMPLE_FILES "${JAVA_SOURCE_PATH}/Client.java" "${JAVA_SOURCE_PATH}/example/Example.java")
+  set(JAVA_SOURCE_FILES "${JAVA_SOURCE_PATH}/TdlNative.java" "${JAVA_SOURCE_PATH}/TdApi.java")
 endif()
 
 if (CMAKE_VERSION VERSION_LESS "3.17")

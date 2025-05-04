@@ -96,7 +96,7 @@ public final class Client {
         if (resultHandler != null) {
             handlers.put(queryId, new Handler(resultHandler, exceptionHandler));
         }
-        send(nativeClientId, queryId, query);
+        TdlNative.send(nativeClientId, queryId, query);
     }
 
     /**
@@ -120,8 +120,8 @@ public final class Client {
      * @throws ExecutionException if query execution fails.
      */
     @SuppressWarnings("unchecked")
-    public static <T extends TdApi.Object> T execute1(TdApi.Function<T> query) throws ExecutionException {
-        TdApi.Object object = execute(query);
+    public static <T extends TdApi.Object> T execute(TdApi.Function<T> query) throws ExecutionException {
+        TdApi.Object object = TdlNative.execute(query);
         if (object instanceof TdApi.Error) {
             throw new ExecutionException((TdApi.Error) object);
         }
@@ -157,8 +157,20 @@ public final class Client {
      * @param maxVerbosityLevel The maximum verbosity level of messages for which the callback will be called.
      * @param logMessageHandler Handler for messages that are added to the internal TDLib log. Pass null to remove the handler.
      */
-    public static void setLogMessageHandler1(int maxVerbosityLevel, Client.LogMessageHandler logMessageHandler) {
-        setLogMessageHandler(maxVerbosityLevel, logMessageHandler);
+    public static void setLogMessageHandler(int maxVerbosityLevel, LogMessageHandler logMessageHandler) {
+        if (logMessageHandler == null) {
+            TdlNative.setLogMessageHandler(maxVerbosityLevel, null);
+        } else {
+            TdlNative.LogMessageHandler handler = new TdlNative.LogMessageHandler() {
+
+                @Override
+                public void onLogMessage(int verbosityLevel, String message) {
+                    logMessageHandler.onLogMessage(verbosityLevel, message);
+                }
+
+            };
+            TdlNative.setLogMessageHandler(maxVerbosityLevel, handler);
+        }
     }
 
     private static class ResponseReceiver implements Runnable {
@@ -167,7 +179,7 @@ public final class Client {
         @Override
         public void run() {
             while (true) {
-                int resultN = receive(clientIds, eventIds, events, 100000.0 /*seconds*/);
+                int resultN = TdlNative.receive(clientIds, eventIds, events, 100000.0 /*seconds*/);
                 for (int i = 0; i < resultN; i++) {
                     processResult(clientIds[i], eventIds[i], events[i]);
                     events[i] = null;
@@ -237,7 +249,7 @@ public final class Client {
 
     private Client(ResultHandler updateHandler, ExceptionHandler updateExceptionHandler, ExceptionHandler defaultExceptionHandler) {
         clientCount.incrementAndGet();
-        nativeClientId = create();
+        nativeClientId = TdlNative.createClientId();
         if (updateHandler != null) {
             updateHandlers.put(nativeClientId, new Handler(updateHandler, updateExceptionHandler));
         }
@@ -247,13 +259,4 @@ public final class Client {
         send(new TdApi.GetOption("version"), null, null);
     }
 
-    private static native int create();
-
-    private static native void send(int nativeClientId, long eventId, TdApi.Function function);
-
-    private static native int receive(int[] clientIds, long[] eventIds, TdApi.Object[] events, double timeout);
-
-    private static native TdApi.Object execute(TdApi.Function function);
-
-    private static native void setLogMessageHandler(int maxVerbosityLevel, LogMessageHandler logMessageHandler);
 }

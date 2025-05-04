@@ -23,7 +23,7 @@ public final class JsonClient {
      * The TDLib instance will not send updates until the first request is sent to it.
      * @return Opaque identifier of a new TDLib instance.
      */
-    public static native int create();
+    public static native int createClientId();
 
     /**
      * Sends request to the TDLib client. May be called from any thread.

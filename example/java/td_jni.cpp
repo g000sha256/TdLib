@@ -58,16 +58,16 @@ static td::ClientManager *get_manager() {
   return td::ClientManager::get_manager_singleton();
 }
 
-static jint Client_createNativeClient(JNIEnv *env, jclass clazz) {
+static jint TdlNative_createClientId(JNIEnv *env, jclass clazz) {
   return static_cast<jint>(get_manager()->create_client_id());
 }
 
-static void Client_nativeClientSend(JNIEnv *env, jclass clazz, jint client_id, jlong id, jobject function) {
+static void TdlNative_send(JNIEnv *env, jclass clazz, jint client_id, jlong id, jobject function) {
   get_manager()->send(static_cast<std::int32_t>(client_id), static_cast<std::uint64_t>(id),
                       fetch_function(env, function));
 }
 
-static jint Client_nativeClientReceive(JNIEnv *env, jclass clazz, jintArray client_ids, jlongArray ids,
+static jint TdlNative_receive(JNIEnv *env, jclass clazz, jintArray client_ids, jlongArray ids,
                                        jobjectArray events, jdouble timeout) {
   jsize events_size = env->GetArrayLength(ids);  // client_ids, ids and events must be of equal size
   if (events_size == 0) {
@@ -99,7 +99,7 @@ static jint Client_nativeClientReceive(JNIEnv *env, jclass clazz, jintArray clie
   return result_size;
 }
 
-static jobject Client_nativeClientExecute(JNIEnv *env, jclass clazz, jobject function) {
+static jobject TdlNative_execute(JNIEnv *env, jclass clazz, jobject function) {
   jobject result;
   td::ClientManager::execute(fetch_function(env, function))->store(env, result);
   return result;
@@ -145,7 +145,7 @@ static void on_log_message(int verbosity_level, const char *log_message) {
   env->DeleteLocalRef(handler);
 }
 
-static void Client_nativeClientSetLogMessageHandler(JNIEnv *env, jclass clazz, jint max_verbosity_level,
+static void TdlNative_setLogMessageHandler(JNIEnv *env, jclass clazz, jint max_verbosity_level,
                                                     jobject new_log_message_handler) {
   if (log_message_handler) {
 #ifdef TD_JSON_JAVA
@@ -189,12 +189,12 @@ static jint register_native(JavaVM *vm) {
 #ifdef TD_JSON_JAVA
   auto client_class = td::jni::get_jclass(env, PACKAGE_NAME "/JsonClient");
 
-  register_method(client_class, "create", "()I", JsonClient_createClientId);
+  register_method(client_class, "createClientId", "()I", JsonClient_createClientId);
   register_method(client_class, "send", "(ILjava/lang/String;)V", JsonClient_send);
   register_method(client_class, "receive", "(D)Ljava/lang/String;", JsonClient_receive);
   register_method(client_class, "execute", "(Ljava/lang/String;)Ljava/lang/String;", JsonClient_execute);
   register_method(client_class, "setLogMessageHandler", "(IL" PACKAGE_NAME "/JsonClient$LogMessageHandler;)V",
-                  Client_nativeClientSetLogMessageHandler);
+                  TdlNative_setLogMessageHandler);
 #else
   auto td_api_class = td::jni::get_jclass(env, PACKAGE_NAME "/TdApi");
   jfieldID commit_hash_field_id =
@@ -207,18 +207,18 @@ static jint register_native(JavaVM *vm) {
     return JAVA_VERSION;
   }
 
-  auto client_class = td::jni::get_jclass(env, PACKAGE_NAME "/Client");
+  auto client_class = td::jni::get_jclass(env, PACKAGE_NAME "/TdlNative");
   auto object_class = td::jni::get_jclass(env, PACKAGE_NAME "/TdApi$Object");
   auto function_class = td::jni::get_jclass(env, PACKAGE_NAME "/TdApi$Function");
 
 #define TD_OBJECT "L" PACKAGE_NAME "/TdApi$Object;"
 #define TD_FUNCTION "L" PACKAGE_NAME "/TdApi$Function;"
-  register_method(client_class, "create", "()I", Client_createNativeClient);
-  register_method(client_class, "send", "(IJ" TD_FUNCTION ")V", Client_nativeClientSend);
-  register_method(client_class, "receive", "([I[J[" TD_OBJECT "D)I", Client_nativeClientReceive);
-  register_method(client_class, "execute", "(" TD_FUNCTION ")" TD_OBJECT, Client_nativeClientExecute);
-  register_method(client_class, "setLogMessageHandler", "(IL" PACKAGE_NAME "/Client$LogMessageHandler;)V",
-                  Client_nativeClientSetLogMessageHandler);
+  register_method(client_class, "createClientId", "()I", TdlNative_createClientId);
+  register_method(client_class, "send", "(IJ" TD_FUNCTION ")V", TdlNative_send);
+  register_method(client_class, "receive", "([I[J[" TD_OBJECT "D)I", TdlNative_receive);
+  register_method(client_class, "execute", "(" TD_FUNCTION ")" TD_OBJECT, TdlNative_execute);
+  register_method(client_class, "setLogMessageHandler", "(IL" PACKAGE_NAME "/TdlNative$LogMessageHandler;)V",
+                  TdlNative_setLogMessageHandler);
 
   register_method(object_class, "toString", "()Ljava/lang/String;", Object_toString);
 
