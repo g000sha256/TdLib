@@ -10,11 +10,11 @@ public final class TdlNative {
 
     public static native int createClientId();
 
-    public static native void send(int clientId, long eventId, TdApi.Function<?> function);
+    public static native void send(int clientId, long eventId, TdlApi.Function<?> function);
 
-    public static native int receive(int[] clientIds, long[] eventIds, TdApi.Object[] events, double timeout);
+    public static native int receive(int[] clientIds, long[] eventIds, TdlApi.Object[] events, double timeout);
 
-    public static native TdApi.Object execute(TdApi.Function<?> function);
+    public static native TdlApi.Object execute(TdlApi.Function<?> function);
 
     public static native void setLogMessageHandler(int maxVerbosityLevel, LogMessageHandler logMessageHandler);
 

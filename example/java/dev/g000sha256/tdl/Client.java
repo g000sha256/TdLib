@@ -28,9 +28,9 @@ public final class Client {
         /**
          * Callback called on result of query to TDLib or incoming update from TDLib.
          *
-         * @param object Result of query or update of type TdApi.Update about new events.
+         * @param object Result of query or update of type TdlApi.Update about new events.
          */
-        void onResult(TdApi.Object object);
+        void onResult(TdlApi.Object object);
     }
 
     /**
@@ -63,18 +63,18 @@ public final class Client {
     }
 
     /**
-     * Exception class thrown when TDLib error occurred while performing {@link #execute(TdApi.Function)}.
+     * Exception class thrown when TDLib error occurred while performing {@link #execute(TdlApi.Function)}.
      */
     public static class ExecutionException extends Exception {
         /**
          * Original TDLib error occurred when performing one of the synchronous functions.
          */
-        public final TdApi.Error error;
+        public final TdlApi.Error error;
 
         /**
-         * @param error TDLib error occurred while performing {@link #execute(TdApi.Function)}.
+         * @param error TDLib error occurred while performing {@link #execute(TdlApi.Function)}.
          */
-        ExecutionException (TdApi.Error error) {
+        ExecutionException (TdlApi.Error error) {
             super(error.code + ": " + error.message);
             this.error = error;
         }
@@ -85,13 +85,13 @@ public final class Client {
      *
      * @param query            Object representing a query to the TDLib.
      * @param resultHandler    Result handler with onResult method which will be called with result
-     *                         of the query or with TdApi.Error as parameter. If it is null, nothing
+     *                         of the query or with TdlApi.Error as parameter. If it is null, nothing
      *                         will be called.
      * @param exceptionHandler Exception handler with onException method which will be called on
      *                         exception thrown from resultHandler. If it is null, then
      *                         defaultExceptionHandler will be called.
      */
-    public void send(TdApi.Function query, ResultHandler resultHandler, ExceptionHandler exceptionHandler) {
+    public void send(TdlApi.Function query, ResultHandler resultHandler, ExceptionHandler exceptionHandler) {
         long queryId = currentQueryId.incrementAndGet();
         if (resultHandler != null) {
             handlers.put(queryId, new Handler(resultHandler, exceptionHandler));
@@ -104,10 +104,10 @@ public final class Client {
      *
      * @param query         Object representing a query to the TDLib.
      * @param resultHandler Result handler with onResult method which will be called with result
-     *                      of the query or with TdApi.Error as parameter. If it is null, then
+     *                      of the query or with TdlApi.Error as parameter. If it is null, then
      *                      defaultExceptionHandler will be called.
      */
-    public void send(TdApi.Function query, ResultHandler resultHandler) {
+    public void send(TdlApi.Function query, ResultHandler resultHandler) {
         send(query, resultHandler, null);
     }
 
@@ -120,10 +120,10 @@ public final class Client {
      * @throws ExecutionException if query execution fails.
      */
     @SuppressWarnings("unchecked")
-    public static <T extends TdApi.Object> T execute(TdApi.Function<T> query) throws ExecutionException {
-        TdApi.Object object = TdlNative.execute(query);
-        if (object instanceof TdApi.Error) {
-            throw new ExecutionException((TdApi.Error) object);
+    public static <T extends TdlApi.Object> T execute(TdlApi.Function<T> query) throws ExecutionException {
+        TdlApi.Object object = TdlNative.execute(query);
+        if (object instanceof TdlApi.Error) {
+            throw new ExecutionException((TdlApi.Error) object);
         }
         return (T) object;
     }
@@ -187,11 +187,11 @@ public final class Client {
             }
         }
 
-        private void processResult(int clientId, long id, TdApi.Object object) {
+        private void processResult(int clientId, long id, TdlApi.Object object) {
             boolean isClosed = false;
-            if (id == 0 && object instanceof TdApi.UpdateAuthorizationState) {
-                TdApi.AuthorizationState authorizationState = ((TdApi.UpdateAuthorizationState) object).authorizationState;
-                if (authorizationState instanceof TdApi.AuthorizationStateClosed) {
+            if (id == 0 && object instanceof TdlApi.UpdateAuthorizationState) {
+                TdlApi.AuthorizationState authorizationState = ((TdlApi.UpdateAuthorizationState) object).authorizationState;
+                if (authorizationState instanceof TdlApi.AuthorizationStateClosed) {
                     isClosed = true;
                 }
             }
@@ -224,7 +224,7 @@ public final class Client {
         private static final int MAX_EVENTS = 1000;
         private final int[] clientIds = new int[MAX_EVENTS];
         private final long[] eventIds = new long[MAX_EVENTS];
-        private final TdApi.Object[] events = new TdApi.Object[MAX_EVENTS];
+        private final TdlApi.Object[] events = new TdlApi.Object[MAX_EVENTS];
     }
 
     private final int nativeClientId;
@@ -256,7 +256,7 @@ public final class Client {
         if (defaultExceptionHandler != null) {
             defaultExceptionHandlers.put(nativeClientId, defaultExceptionHandler);
         }
-        send(new TdApi.GetOption("version"), null, null);
+        send(new TdlApi.GetOption("version"), null, null);
     }
 
 }

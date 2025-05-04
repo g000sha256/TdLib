@@ -52,10 +52,10 @@ if [ "$TDLIB_INTERFACE" == "Java" ] ; then
 
   echo "Generating Java source files..."
   cmake --build build-native-$TDLIB_INTERFACE --target tl_generate_java || exit 1
-  php AddIntDef.php dev/g000sha256/tdl/TdApi.java || exit 1
+  php AddIntDef.php dev/g000sha256/tdl/TdlApi.java || exit 1
   mkdir -p tdlib/java/dev/g000sha256/tdl || exit 1
   cp -p {..,tdlib}/java/dev/g000sha256/tdl/TdlNative.java || exit 1
-  mv {,tdlib/java/}dev/g000sha256/tdl/TdApi.java || exit 1
+  mv {,tdlib/java/}dev/g000sha256/tdl/TdlApi.java || exit 1
   rm -rf org || exit 1
 
   echo "Generating Javadoc documentation..."

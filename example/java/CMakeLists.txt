@@ -21,7 +21,7 @@ if (NOT Java_FOUND)
 endif()
 message(STATUS "Found Java: ${Java_JAVAC_EXECUTABLE} ${Java_JAVADOC_EXECUTABLE}")
 
-# Generating TdApi.java
+# Generating TdlApi.java
 set(TD_API_JAVA_PACKAGE "dev/g000sha256/tdl")
 set(TD_API_JAVA_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 set(JAVA_SOURCE_PATH "${TD_API_JAVA_PATH}/${TD_API_JAVA_PACKAGE}")
@@ -42,9 +42,9 @@ else()
   set(TD_API_TLO_PATH ${CMAKE_CURRENT_SOURCE_DIR}/td/bin/td/generate/scheme/td_api.tlo)
   set(TD_API_TL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/td/bin/td/generate/scheme/td_api.tl)
   set(JAVADOC_TL_DOCUMENTATION_GENERATOR_PATH ${CMAKE_CURRENT_SOURCE_DIR}/td/bin/td/generate/JavadocTlDocumentationGenerator.php)
-  set(GENERATE_JAVA_API_CMD ${CMAKE_CURRENT_SOURCE_DIR}/td/bin/td_generate_java_api TdApi "${TD_API_TLO_PATH}" "${TD_API_JAVA_PATH}" "${TD_API_JAVA_PACKAGE}")
+  set(GENERATE_JAVA_API_CMD ${CMAKE_CURRENT_SOURCE_DIR}/td/bin/td_generate_java_api TdlApi "${TD_API_TLO_PATH}" "${TD_API_JAVA_PATH}" "${TD_API_JAVA_PACKAGE}")
   if (PHP_EXECUTABLE)
-    set(GENERATE_JAVA_API_CMD ${GENERATE_JAVA_API_CMD} && ${PHP_EXECUTABLE} "${JAVADOC_TL_DOCUMENTATION_GENERATOR_PATH}" "${TD_API_TL_PATH}" "${JAVA_SOURCE_PATH}/TdApi.java")
+    set(GENERATE_JAVA_API_CMD ${GENERATE_JAVA_API_CMD} && ${PHP_EXECUTABLE} "${JAVADOC_TL_DOCUMENTATION_GENERATOR_PATH}" "${TD_API_TL_PATH}" "${JAVA_SOURCE_PATH}/TdlApi.java")
   endif()
 
   add_custom_target(td_generate_java_api
@@ -54,7 +54,7 @@ else()
   )
 
   set(JAVA_EXAMPLE_FILES "${JAVA_SOURCE_PATH}/Client.java" "${JAVA_SOURCE_PATH}/example/Example.java")
-  set(JAVA_SOURCE_FILES "${JAVA_SOURCE_PATH}/TdlNative.java" "${JAVA_SOURCE_PATH}/TdApi.java")
+  set(JAVA_SOURCE_FILES "${JAVA_SOURCE_PATH}/TdlNative.java" "${JAVA_SOURCE_PATH}/TdlApi.java")
 endif()
 
 if (CMAKE_VERSION VERSION_LESS "3.17")

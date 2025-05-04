@@ -126,7 +126,7 @@ class JavadocTlDocumentationGenerator extends TlDocumentationGenerator
             $nullable_type_import = '';
         }
 
-        $this->addDocumentation('public class TdApi {', <<<EOT
+        $this->addDocumentation('public class TdlApi {', <<<EOT
 $nullable_type_import/**
  * This class contains as static nested classes all other TDLib interface
  * type-classes and function-classes.
