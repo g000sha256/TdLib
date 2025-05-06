@@ -116,13 +116,13 @@ void init_vars(JNIEnv *env, const char *td_api_java_package) {
   LongClass = get_jclass(env, "java/lang/Long");
   DoubleClass = get_jclass(env, "java/lang/Double");
   StringClass = get_jclass(env, "java/lang/String");
-  ObjectClass = get_jclass(env, (PSLICE() << td_api_java_package << "/TdApi$Object").c_str());
+  ObjectClass = get_jclass(env, (PSLICE() << td_api_java_package << "/TdlApi$Object").c_str());
   ArrayKeyboardButtonClass =
-      get_jclass(env, (PSLICE() << "[L" << td_api_java_package << "/TdApi$KeyboardButton;").c_str());
+      get_jclass(env, (PSLICE() << "[L" << td_api_java_package << "/TdlApi$KeyboardButton;").c_str());
   ArrayInlineKeyboardButtonClass =
-      get_jclass(env, (PSLICE() << "[L" << td_api_java_package << "/TdApi$InlineKeyboardButton;").c_str());
+      get_jclass(env, (PSLICE() << "[L" << td_api_java_package << "/TdlApi$InlineKeyboardButton;").c_str());
   ArrayPageBlockTableCellClass =
-      get_jclass(env, (PSLICE() << "[L" << td_api_java_package << "/TdApi$PageBlockTableCell;").c_str());
+      get_jclass(env, (PSLICE() << "[L" << td_api_java_package << "/TdlApi$PageBlockTableCell;").c_str());
   GetConstructorID = get_method_id(env, ObjectClass, "getConstructor", "()I");
   BooleanGetValueMethodID = get_method_id(env, BooleanClass, "booleanValue", "()Z");
   IntegerGetValueMethodID = get_method_id(env, IntegerClass, "intValue", "()I");
