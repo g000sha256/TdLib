@@ -1,0 +1,35 @@
+name: Sync with upstream
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup git
+        run: |
+          git config user.name "GitHub"
+          git config user.email "noreply@github.com"
+
+      - name: Setup upstream
+        run: |
+          git remote add upstream https://github.com/tdlib/td.git
+          git fetch upstream
+
+      - name: Sync branch
+        run: |
+          git checkout master
+          git merge upstream/master --ff-only
+          git push origin master
