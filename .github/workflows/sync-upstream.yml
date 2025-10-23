@@ -31,5 +31,5 @@ jobs:
       - name: Sync branch
         run: |
           git checkout master
-          git merge upstream/master --ff-only
-          git push origin master
+          git rebase upstream/master --rebase-merges
+          git push origin master --force-with-lease
