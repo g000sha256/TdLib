@@ -1,0 +1,100 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - develop
+
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      - name: Configure Git identity
+        run: |
+          git config user.name "Georgii Ippolitov"
+          git config user.email "detmmpmznb@g000sha256.dev"
+
+      - name: Create tags and releases for new versions
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+
+        run: |
+          current_commit=$(git rev-parse HEAD)
+          parents_count=$(git log -1 --format=%P $current_commit | wc -w)
+
+          if [ $parents_count -ne 2 ]; then
+            echo ""
+            echo "ℹ️ No changes found"
+            exit 0
+          fi
+
+          previous_merge=$(git log --merges -n 2 --format=%H | tail -1)
+
+          if [ -n $previous_merge ] && [ $previous_merge != $current_commit ]; then
+            commits=$(git log ${current_commit}^2 --format=%H --not ${previous_merge}^2 --reverse)
+          else
+            merge_base=$(git merge-base ${current_commit}^1 ${current_commit}^2)
+            commits=$(git log $merge_base..${current_commit}^2 --format=%H --reverse)
+          fi
+
+          echo ""
+          echo "📋 Processing new commits:"
+          for commit in $commits; do
+            echo "  📝 $(git log --format='%h %s' -n 1 $commit)"
+          done
+
+          versions=()
+          for commit in $commits; do
+            commit_message=$(git log --format=%s -n 1 $commit)
+
+            if echo $commit_message | grep -qE 'Update version to [0-9]+\.[0-9]+\.[0-9]+\.'; then
+              version=$(echo $commit_message | sed -E 's/Update version to ([0-9]+\.[0-9]+\.[0-9]+)\./\1/')
+              versions+=($version:$commit)
+            fi
+          done
+
+          if [ ${#versions[@]} -eq 0 ]; then
+            echo ""
+            echo "ℹ️ No version updates found"
+            exit 0
+          fi
+
+          echo ""
+          echo "🏷️ Creating tags:"
+          for item in ${versions[@]}; do
+            tag=v${item%%:*}
+            commit=${item#*:}
+
+            if git tag $tag $commit 2>/dev/null; then
+              echo "  ✅ Created tag: $tag"
+            else
+              echo "  ⚠️ Tag already exists: $tag"
+            fi
+          done
+
+
+          echo ""
+          echo "⬆️ Pushing tags to origin..."
+          git push origin --tags -q
+
+          echo ""
+          echo "📦 Creating releases:"
+          for item in ${versions[@]}; do
+            version=${item%%:*}
+            tag=v$version
+
+            if gh release create $tag --title $version --generate-notes > /dev/null 2>&1; then
+              echo "  ✅ Created release: $version"
+            else
+              echo "  ⚠️ Release already exists: $version"
+            fi
+          done
