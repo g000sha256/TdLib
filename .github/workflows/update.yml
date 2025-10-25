@@ -1,0 +1,40 @@
+name: Update
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      - name: Configure Git identity
+        run: |
+          git config user.name "Georgii Ippolitov"
+          git config user.email "detmmpmznb@g000sha256.dev"
+
+      - name: Add upstream remote and fetch
+        run: |
+          git remote add upstream https://github.com/tdlib/td.git
+          git fetch upstream
+
+      - name: Merge upstream/master into master
+        run: |
+          git checkout -B master origin/master
+          git merge upstream/master
+          git push origin master
+
+      - name: Merge master into develop
+        run: |
+          git checkout -B develop origin/develop
+          git merge master --no-ff --no-edit
+          git push origin develop
